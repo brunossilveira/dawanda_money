@@ -59,13 +59,13 @@ RSpec.describe DawandaMoney do
   end
 
   describe '#convert_to' do
-    let(:currency) { 'USD' }
+    let(:currency) { 'EUR' }
     let(:amount) { 50 }
 
     subject { described_class.new(amount, currency).convert_to(conversion_currency) }
 
     context 'when currency exists' do
-      let(:conversion_currency) { 'EUR' }
+      let(:conversion_currency) { 'USD' }
       let(:base_currency)  { 'EUR' }
       let(:rates) do
         {

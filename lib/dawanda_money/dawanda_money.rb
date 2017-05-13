@@ -25,7 +25,7 @@ class DawandaMoney
   end
 
   def convert_to(currency)
-    rate = self.class.rates.dig(currency, @currency)
+    rate = self.class.rates.dig(@currency, currency)
 
     self.class.new(amount * rate, currency) if rate
   end
