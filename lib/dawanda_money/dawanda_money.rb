@@ -21,6 +21,8 @@ class DawandaMoney
   end
 
   def convert_to(currency)
+    return self if currency == @currency
+
     if @@base_currency != currency
       rate = @@rates.dig(currency)
 
