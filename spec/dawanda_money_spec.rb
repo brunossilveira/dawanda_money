@@ -19,7 +19,8 @@ RSpec.describe DawandaMoney do
     it 'sets up values correcly' do
       subject
 
-      expect(described_class.rates).to eq({ base_currency => rates})
+      expect(described_class.class_variable_get(:@@rates)).to eq(rates)
+      expect(described_class.class_variable_get(:@@base_currency)).to eq(base_currency)
     end
   end
 
@@ -65,7 +66,6 @@ RSpec.describe DawandaMoney do
     subject { described_class.new(amount, currency).convert_to(conversion_currency) }
 
     context 'when currency exists' do
-      let(:conversion_currency) { 'USD' }
       let(:base_currency)  { 'EUR' }
       let(:rates) do
         {
@@ -77,17 +77,24 @@ RSpec.describe DawandaMoney do
         described_class.conversion_rates(base_currency, rates)
       end
 
-      it 'converts correctly' do
-        expect(subject.class).to eq(described_class)
-        expect(subject.amount).to eq(100.0)
+      context 'when converting directly' do
+        let(:conversion_currency) { 'USD' }
+
+        it 'converts correctly' do
+          expect(subject.class).to eq(described_class)
+          expect(subject.amount).to eq(100.0)
+        end
       end
-    end
 
-    context 'when currency does not exist' do
-      let(:conversion_currency) { 'wrong' }
+      context 'when converting it back' do
+        let(:conversion_currency) { 'USD' }
 
-      it 'returns nil' do
-        expect(subject).to be_nil
+        subject { described_class.new(amount, currency).convert_to(conversion_currency).convert_to(currency) }
+
+        it 'converts correctly' do
+          expect(subject.class).to eq(described_class)
+          expect(subject.amount).to eq(50)
+        end
       end
     end
   end

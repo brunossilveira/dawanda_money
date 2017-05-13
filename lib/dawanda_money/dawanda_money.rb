@@ -1,4 +1,5 @@
 class DawandaMoney
+  include Comparable
   include Arithmetic
 
   attr_reader :amount, :currency
@@ -6,13 +7,8 @@ class DawandaMoney
   DEFAULT_CURRENCY = 'EUR'
 
   def self.conversion_rates(base_currency, rates)
-    @rates ||= {}
-
-    @rates[base_currency] = rates
-  end
-
-  def self.rates
-    @rates
+    @@base_currency = base_currency
+    @@rates = rates
   end
 
   def initialize(amount, currency = DEFAULT_CURRENCY)
@@ -25,8 +21,19 @@ class DawandaMoney
   end
 
   def convert_to(currency)
-    rate = self.class.rates.dig(@currency, currency)
+    if @@base_currency != currency
+      rate = @@rates.dig(currency)
 
-    self.class.new(amount * rate, currency) if rate
+      new_amount = (amount * rate).round(2)
+
+      self.class.new(new_amount, currency)
+    else
+      rate = @@rates.dig(@currency)
+
+      new_amount = (amount / rate).round(2)
+
+      self.class.new(new_amount, currency)
+    end
   end
 end
+
