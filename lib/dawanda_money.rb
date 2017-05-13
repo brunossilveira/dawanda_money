@@ -1,5 +1,2 @@
-require "dawanda_money/version"
-
-module DawandaMoney
-
-end
+require 'dawanda_money/version'
+require 'dawanda_money/dawanda_money'

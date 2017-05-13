@@ -1,3 +1,3 @@
-module DawandaMoney
+class DawandaMoney
   VERSION = "0.1.0"
 end
