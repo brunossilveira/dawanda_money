@@ -14,11 +14,17 @@ class DawandaMoney
   end
 
   def initialize(amount, currency = DEFAULT_CURRENCY)
-    @amount = amount
+    @amount = amount.to_f
     @currency = currency
   end
 
   def inspect
-    "#{amount.to_f} #{currency}"
+    "#{amount} #{currency}"
+  end
+
+  def convert_to(currency)
+    rate = self.class.rates[@currency][currency]
+
+    self.class.new(amount * rate, currency) if rate
   end
 end

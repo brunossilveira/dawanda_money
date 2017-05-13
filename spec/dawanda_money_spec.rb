@@ -57,4 +57,38 @@ RSpec.describe DawandaMoney do
       expect(subject).to eq("#{amount.to_f} #{currency}")
     end
   end
+
+  describe '#convert_to' do
+    let(:currency) { 'EUR' }
+    let(:amount) { 50 }
+
+    subject { described_class.new(amount, currency).convert_to(conversion_currency) }
+
+    context 'when currency exists' do
+      let(:conversion_currency) { 'USD' }
+      let(:base_currency)  { 'EUR' }
+      let(:rates) do
+        {
+          'USD' => 2
+        }
+      end
+
+      before do
+        described_class.conversion_rates(base_currency, rates)
+      end
+
+      it 'converts correctly' do
+        expect(subject.class).to eq(described_class)
+        expect(subject.amount).to eq(100.0)
+      end
+    end
+
+    context 'when currency does not exist' do
+      let(:conversion_currency) { 'wrong' }
+
+      it 'returns nil' do
+        expect(subject).to be_nil
+      end
+    end
+  end
 end
