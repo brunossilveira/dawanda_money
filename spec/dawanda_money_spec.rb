@@ -5,6 +5,24 @@ RSpec.describe DawandaMoney do
     expect(DawandaMoney::VERSION).not_to be nil
   end
 
+  describe '.conversion_rates' do
+    let(:base_currency)  { 'EUR' }
+    let(:rates) do
+      {
+        'USD' => 1.11,
+        'Bitcoin' => 0.0047
+      }
+    end
+
+    subject { described_class.conversion_rates(base_currency, rates) }
+
+    it 'sets up values correcly' do
+      subject
+
+      expect(described_class.rates).to eq({ base_currency => rates})
+    end
+  end
+
   describe '#initialize' do
     let(:amount) { 10 }
 

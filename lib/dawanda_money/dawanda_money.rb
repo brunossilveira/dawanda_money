@@ -1,7 +1,17 @@
 class DawandaMoney
+  attr_reader :amount, :currency
+
   DEFAULT_CURRENCY = 'EUR'
 
-  attr_reader :amount, :currency
+  def self.conversion_rates(base_currency, rates)
+    @rates ||= {}
+
+    @rates[base_currency] = rates
+  end
+
+  def self.rates
+    @rates
+  end
 
   def initialize(amount, currency = DEFAULT_CURRENCY)
     @amount = amount
